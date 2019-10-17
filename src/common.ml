@@ -38,7 +38,8 @@ end
 
 module Pol (F: Field) =
 struct
-    type t = F.t list
+    type e = F.t
+    type t = e list
 
     let create f =
         let rec drop_while p = function
@@ -125,4 +126,37 @@ struct
         let (d, _, v) = ZEuclid.extended_gcd n a in
         assert (d = 1);
         v
+end
+
+
+module type PolRing =
+sig
+    type e
+    include Ring with type t = e list
+
+    val create: e list -> t
+    val deg: t -> int
+end
+
+module type IntPolRing = PolRing with type e = int
+
+module IntPolIO (PolR: IntPolRing) =
+struct
+    let read_pol () =
+        let deg = read_int () in
+        let f =
+            read_line ()
+            |> String.split_on_char ' '
+            |> List.map int_of_string
+            |> PolR.create
+        in
+        assert (deg = PolR.deg f);
+        f
+
+    let print_pol f =
+        let deg = PolR.deg f in
+        Printf.printf "%d\n" deg;
+        match deg with
+        | -1 -> Printf.printf "0\n"
+        | _ -> Printf.printf "%s\n" (PolR.to_string f)
 end
