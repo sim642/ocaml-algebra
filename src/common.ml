@@ -28,12 +28,7 @@ struct
     let ( * ) = Pervasives.( * )
     let one = 1
 
-    let inv = function
-        | 1 -> 1
-        | -1 -> -1
-        | x -> failwith @@ Printf.sprintf "%d not invertible in Z" x
-
-    let quot_rem a b = (a / b, (a mod b + b) mod b) (* positiivne jääk *)
+    let quot_rem a b = (a / b, (a mod b + b) mod b) (* non-negative remainder *)
 end
 
 module Pol (F: Field) =
@@ -60,7 +55,7 @@ struct
 
     let deg f = List.length f - 1
 
-    (* loengukonspekti teoreemist 9.11 *)
+    (* from Algebra I lecture notes theorem 9.11 *)
     let rec quot_rem f g =
         let n = deg f in
         let m = deg g in
@@ -70,7 +65,6 @@ struct
             let an = List.nth f n in
             let bm = List.nth g m in
             let lead = List.init (n - m) (fun _ -> F.zero) @ [F.(inv bm * an)] in
-            (* let lead = Core_kernel.List.init (n - m) (fun _ -> F.zero) @ [F.(inv bm * an)] in *)
             let g1 = g * lead in
             let f1 = f + neg g1 in
             let (q1, r) = quot_rem f1 g in
@@ -104,7 +98,6 @@ struct
     let lcm a b = fst @@ quot_rem (a * b) (gcd a b)
 end
 
-
 module ZEuclid = EuclideanAlgorithm (Z)
 
 module Zn (Arg: sig val n: int end) =
@@ -127,7 +120,6 @@ struct
         assert (d = 1);
         v
 end
-
 
 module type PolRing =
 sig
