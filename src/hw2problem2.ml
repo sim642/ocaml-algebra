@@ -9,12 +9,15 @@ let solve_euclid_task (type t) (module F: Field with type t = t) a b =
     Printf.printf "  gcd: %s\n" (PolF.to_string d);
     Printf.printf "  s: %s; t: %s\n" (PolF.to_string s) (PolF.to_string t)
 
-module Z2 = Zn (struct let n = 2 end)
-let a1 = [0; 0; 1; 0; 1]
-let b1 = [0; 1; 0; 0; 1]
-let () = solve_euclid_task (module Z2) a1 b1
+let () =
+    let module F = Zn (struct let n = 2 end) in
+    let a = [0; 0; 1; 0; 1] in
+    let b = [0; 1; 0; 0; 1] in
+    solve_euclid_task (module F) a b
 
-module Z5 = Zn (struct let n = 5 end)
-let a2 = [2; 4; 1; 1]
-let b2 = [0; 1; 0; 1]
-let () = solve_euclid_task (module Z5) a2 b2
+
+let () =
+    let module F = Zn (struct let n = 5 end) in
+    let a = [2; 4; 1; 1] in
+    let b = [0; 1; 0; 1] in
+    solve_euclid_task (module F) a b
