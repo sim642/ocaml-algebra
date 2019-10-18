@@ -43,7 +43,7 @@ struct
         in
         List.rev f |> drop_while ((=) F.zero) |> List.rev
 
-    let to_string f = List.fold_right (fun a acc -> F.to_string a ^ " " ^ acc) f ""
+    let to_string f = String.concat " " (List.map F.to_string f)
 
     let rec (+) f g = create @@ match f, g with
         | f, [] | [], f -> f
