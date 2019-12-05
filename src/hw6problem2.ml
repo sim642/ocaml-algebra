@@ -28,17 +28,17 @@ struct
             let r = mul a (n - 1) in
             F.(a + r)
 
-    let decode (y: F.t list): F.t list =
-        let s = List.init (d - 2 + 1) (fun l ->
+    let syndrome y =
+        List.init (d - 2 + 1) (fun l ->
                 alpha
                 |> List.map (fun alphai -> pow alphai l)
                 |> List.map2 F.( * ) v
                 |> List.map2 F.( * ) y
                 |> List.fold_left F.(+) F.zero
             )
-        in
 
-        (* copied from EuclideanAlgorithm *)
+    let euclidean_key_equation s =
+        (* copied & modified from EuclideanAlgorithm *)
         let extended_gcd a b =
             let open PolF in
             let rec egcd r rr t tt =
@@ -52,13 +52,16 @@ struct
             egcd a b zero one
         in
 
-        let (r, t) = extended_gcd (List.init (d - 1) (fun _ -> F.zero) @ [F.one]) s in
+        let a = List.init (d - 1) (fun _ -> F.zero) @ [F.one] in
+        let (r, t) = extended_gcd a s in
 
         let c = List.hd t in
         let c_inv = F.inv c in
         let lambda = PolF.([c_inv] * t) in
         let gamma = PolF.([c_inv] * r) in
+        (lambda, gamma)
 
+    let forney lambda gamma =
         let rec eval f x = match f with
             | [] -> F.zero
             | a :: f -> F.(a + x * eval f x)
@@ -75,7 +78,13 @@ struct
                 else
                     F.zero
             ) alpha v in
+        e
 
+    let decode (y: F.t list): F.t list =
+        let s = syndrome y in
+        let (lambda, gamma) = euclidean_key_equation s in
+
+        let e = forney lambda gamma in
         let c = List.map2 (fun yi ei -> F.(yi + neg ei)) y e in
         c
 end
