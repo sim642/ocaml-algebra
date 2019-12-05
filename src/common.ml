@@ -118,7 +118,7 @@ struct
         (* https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Modular_integers *)
         let (d, _, v) = ZEuclid.extended_gcd n a in
         assert (d = 1);
-        v
+        create v
 end
 
 module type PolRing =
