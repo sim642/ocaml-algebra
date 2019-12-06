@@ -16,21 +16,16 @@ struct
     module PolF = Pol (F)
     let d = n - k + 1
 
-    let rec pow a = function
-        | 0 -> F.one
-        | n ->
-            let r = pow a (n - 1) in
-            F.(a * r)
+    let rec repeat f a n x = match n with
+        | 0 -> a
+        | n -> f x (repeat f a (n - 1) x)
 
-    let rec mul a = function
-        | 0 -> F.zero
-        | n ->
-            let r = mul a (n - 1) in
-            F.(a + r)
+    let pow = repeat F.( * ) F.one
+    let mul = repeat F.(+) F.zero
 
     let h = List.init (d - 2 + 1) (fun l ->
             alpha
-            |> List.map (fun alphai -> pow alphai l)
+            |> List.map (pow l)
             |> List.map2 F.( * ) v
         )
 
@@ -70,7 +65,7 @@ struct
             | a :: f -> F.(a + x * eval f x)
         in
 
-        let deriv f = PolF.create @@ List.tl (List.mapi (fun i a -> mul a i) f) in
+        let deriv f = PolF.create @@ List.tl (List.mapi mul f) in
         let lambda_deriv = deriv lambda in
 
         let e = List.map2 (fun alphaj vj ->
