@@ -69,6 +69,8 @@ struct
             let f1 = f + neg g1 in
             let (q1, r) = quot_rem f1 g in
             (lead + q1, r)
+
+    let eval f x = List.fold_right (fun a acc -> F.(a + x * acc)) f F.zero
 end
 
 module type EuclideanRing =

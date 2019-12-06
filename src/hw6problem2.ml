@@ -60,19 +60,17 @@ struct
         (lambda, gamma)
 
     let forney lambda gamma =
-        let rec eval f x = match f with
-            | [] -> F.zero
-            | a :: f -> F.(a + x * eval f x)
-        in
-
         let deriv f = PolF.create @@ List.tl (List.mapi mul f) in
-        let lambda_deriv = deriv lambda in
+
+        let lambda_eval = PolF.eval lambda in
+        let gamma_eval = PolF.eval gamma in
+        let lambda'_eval = PolF.eval (deriv lambda) in
 
         let e = List.map2 (fun alphaj vj ->
                 let alphaj_inv = F.inv alphaj in
                 let vj_inv = F.inv vj in
-                if eval lambda alphaj_inv = F.zero then
-                    F.((neg (alphaj * vj_inv)) * (eval gamma alphaj_inv) * inv (eval lambda_deriv alphaj_inv))
+                if lambda_eval alphaj_inv = F.zero then
+                    F.((neg (alphaj * vj_inv)) * (gamma_eval alphaj_inv) * inv (lambda'_eval alphaj_inv))
                 else
                     F.zero
             ) alpha v in
