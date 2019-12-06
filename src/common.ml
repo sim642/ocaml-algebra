@@ -129,7 +129,7 @@ end
 
 module ZEuclid = EuclideanAlgorithm (Z)
 
-module Zn (Arg: sig val n: int end) =
+(* module Zn (Arg: sig val n: int end) =
 struct
     type t = int
     let n = Arg.n
@@ -148,7 +148,41 @@ struct
         let (d, _, v) = ZEuclid.extended_gcd n a in
         assert (d = 1);
         create v
+end *)
+
+module type ResidueParam =
+sig
+    module R: EuclideanRing
+    val m: R.t
 end
+
+module Residue (Param: ResidueParam) =
+struct
+    include Param
+    module REuclid = EuclideanAlgorithm (R)
+
+    type t = R.t
+
+    let create a = snd @@ R.quot_rem a m
+
+    let to_string a = R.to_string a
+
+    let (+) a b = create R.(a + b)
+    let zero = R.zero
+    let neg a = create R.(neg a)
+    let ( * ) a b = create R.(a * b)
+    let one = R.one
+    let inv a =
+        (* https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Modular_integers *)
+        let (d, _, v) = REuclid.extended_gcd m a in
+        assert (d = one);
+        create v
+end
+
+module Zn (Arg: sig val n: int end) = Residue (struct
+        module R = Z
+        let m = Arg.n
+    end)
 
 module type PolRing =
 sig
