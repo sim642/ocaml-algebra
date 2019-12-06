@@ -28,14 +28,17 @@ struct
             let r = mul a (n - 1) in
             F.(a + r)
 
-    let syndrome y =
-        List.init (d - 2 + 1) (fun l ->
-                alpha
-                |> List.map (fun alphai -> pow alphai l)
-                |> List.map2 F.( * ) v
-                |> List.map2 F.( * ) y
-                |> List.fold_left F.(+) F.zero
-            )
+    let h = List.init (d - 2 + 1) (fun l ->
+            alpha
+            |> List.map (fun alphai -> pow alphai l)
+            |> List.map2 F.( * ) v
+        )
+
+    let syndrome y = List.map (fun h_row ->
+            h_row
+            |> List.map2 F.( * ) y
+            |> List.fold_left F.(+) F.zero
+        ) h
 
     let euclidean_key_equation s =
         (* copied & modified from EuclideanAlgorithm *)
