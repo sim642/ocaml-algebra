@@ -48,8 +48,7 @@ struct
         let a = List.init (d - 1) (fun _ -> F.zero) @ [F.one] in
         let (r, t) = extended_gcd a s in
 
-        let c = List.hd t in
-        let c_inv = F.inv c in
+        let c_inv = F.inv (List.hd t) in
         let lambda = PolF.([c_inv] * t) in
         let gamma = PolF.([c_inv] * r) in
         (lambda, gamma)
@@ -59,22 +58,21 @@ struct
         let gamma_eval = PolF.eval gamma in
         let lambda'_eval = PolF.(eval (deriv lambda)) in
 
-        let e = List.map2 (fun alphaj vj ->
-                let alphaj_inv = F.inv alphaj in
-                let vj_inv = F.inv vj in
-                if lambda_eval alphaj_inv = F.zero then
-                    F.((neg (alphaj * vj_inv)) * (gamma_eval alphaj_inv) * inv (lambda'_eval alphaj_inv))
+        List.map2 (fun alpha_j v_j ->
+                let open F in
+                let alpha_j_inv = inv alpha_j in
+                if lambda_eval alpha_j_inv = zero then
+                    neg alpha_j * inv v_j * gamma_eval alpha_j_inv * inv (lambda'_eval alpha_j_inv)
                 else
-                    F.zero
-            ) alpha v in
-        e
+                    zero
+            ) alpha v
 
     let decode (y: F.t list): F.t list =
         let s = syndrome y in
         let (lambda, gamma) = euclidean_key_equation s in
 
         let e = forney lambda gamma in
-        let c = List.map2 (fun yi ei -> F.(yi + neg ei)) y e in
+        let c = List.map2 (fun y_i e_i -> F.(y_i + neg e_i)) y e in
         c
 end
 
