@@ -1,3 +1,7 @@
+let rec repeat f a n x = match n with
+    | 0 -> a
+    | n -> f x (repeat f a (n - 1) x)
+
 module type Ring =
 sig
     type t
@@ -71,6 +75,12 @@ struct
             (lead + q1, r)
 
     let eval f x = List.fold_right (fun a acc -> F.(a + x * acc)) f F.zero
+
+    let deriv = function
+        | [] -> []
+        | f ->
+            let mul = repeat F.(+) F.zero in
+            create @@ List.tl (List.mapi mul f)
 end
 
 module type EuclideanRing =

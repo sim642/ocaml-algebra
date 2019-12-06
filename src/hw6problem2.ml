@@ -16,18 +16,13 @@ struct
     module PolF = Pol (F)
     let d = n - k + 1
 
-    let rec repeat f a n x = match n with
-        | 0 -> a
-        | n -> f x (repeat f a (n - 1) x)
-
-    let pow = repeat F.( * ) F.one
-    let mul = repeat F.(+) F.zero
-
-    let h = List.init (d - 2 + 1) (fun l ->
-            alpha
-            |> List.map (pow l)
-            |> List.map2 F.( * ) v
-        )
+    let h =
+        let pow = repeat F.( * ) F.one in
+        List.init (d - 2 + 1) (fun l ->
+                alpha
+                |> List.map (pow l)
+                |> List.map2 F.( * ) v
+            )
 
     let syndrome y = List.map (fun h_row ->
             h_row
@@ -60,11 +55,9 @@ struct
         (lambda, gamma)
 
     let forney lambda gamma =
-        let deriv f = PolF.create @@ List.tl (List.mapi mul f) in
-
         let lambda_eval = PolF.eval lambda in
         let gamma_eval = PolF.eval gamma in
-        let lambda'_eval = PolF.eval (deriv lambda) in
+        let lambda'_eval = PolF.(eval (deriv lambda)) in
 
         let e = List.map2 (fun alphaj vj ->
                 let alphaj_inv = F.inv alphaj in
