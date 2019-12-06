@@ -24,7 +24,7 @@ struct
                 |> List.map2 F.( * ) v
             )
 
-    let syndrome y = List.map (fun h_row ->
+    let syndrome y = PolF.create @@ List.map (fun h_row ->
             h_row
             |> List.map2 F.( * ) y
             |> List.fold_left F.(+) F.zero
