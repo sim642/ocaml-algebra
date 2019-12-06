@@ -3,7 +3,7 @@ open Common
 let () =
     let module F2 = Zn (struct let n = 2 end) in
     let module PolF2 = Pol (F2) in
-    let module F8 = Residue (struct
+    let module F8 = Quotient (struct
             module R = PolF2
             let m = [1; 1; 0; 1]
         end)

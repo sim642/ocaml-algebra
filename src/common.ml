@@ -150,13 +150,13 @@ struct
         create v
 end *)
 
-module type ResidueParam =
+module type QuotientParam =
 sig
     module R: EuclideanRing
     val m: R.t
 end
 
-module Residue (Param: ResidueParam) =
+module Quotient (Param: QuotientParam) =
 struct
     include Param
     module REuclid = EuclideanAlgorithm (R)
@@ -179,7 +179,7 @@ struct
         create v
 end
 
-module Zn (Arg: sig val n: int end) = Residue (struct
+module Zn (Arg: sig val n: int end) = Quotient (struct
         module R = Z
         let m = Arg.n
     end)
