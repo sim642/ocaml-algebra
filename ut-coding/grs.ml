@@ -1,4 +1,4 @@
-open Common
+open Lib.Common
 
 module type Param =
 sig

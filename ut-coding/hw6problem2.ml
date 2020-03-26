@@ -1,4 +1,4 @@
-open Common
+open Lib.Common
 
 let read_vector n =
     let vector =

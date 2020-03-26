@@ -1,4 +1,4 @@
-open Common
+open Lib.Common
 
 let () =
     let module F2 = Zn (struct let n = 2 end) in

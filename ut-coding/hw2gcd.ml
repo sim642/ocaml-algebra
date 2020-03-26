@@ -1,4 +1,4 @@
-open Common
+open Lib.Common
 
 let rec last = function
     | [] -> failwith "last: empty list"

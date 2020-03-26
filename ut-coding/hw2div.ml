@@ -1,4 +1,4 @@
-open Common
+open Lib.Common
 
 let solve_div_task () =
     let p = read_int () in

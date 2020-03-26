@@ -1,6 +1,6 @@
-open Common
+open Lib.Common
 
-let solve_sub_task () =
+let solve_mul_task () =
     let p = read_int () in
     let module F = Zn (struct let n = p end) in
     let module PolF = Pol (F) in
@@ -9,7 +9,7 @@ let solve_sub_task () =
     let a = PolFIO.read_pol () in
     let b = PolFIO.read_pol () in
 
-    let c = PolF.(a + neg b) in
+    let c = PolF.(a * b) in
     PolFIO.print_pol c
 
-let () = solve_sub_task ()
+let () = solve_mul_task ()
