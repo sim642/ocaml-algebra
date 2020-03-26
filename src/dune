@@ -1,0 +1,2 @@
+(executables
+ (names hw2add hw2sub hw2mul hw2div hw2gcd hw2problem2 hw6problem2 practiceExtension))
