@@ -19,7 +19,10 @@ let solve_grs_decode_task () =
     let p = read_int () in
     let module F = Zn (struct let n = p end) in
 
-    let [n; k] = read_vector 2 in
+    let (n, k) = match read_vector 2 with
+        | [n; k] -> (n, k)
+        | _ -> failwith "read_vector lied"
+    in
 
     let alpha = read_vector n in
     let v = read_vector n in
