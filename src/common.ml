@@ -43,10 +43,10 @@ struct
 
     let to_string = string_of_int
 
-    let (+) = Pervasives.(+)
+    let (+) = Stdlib.(+)
     let zero = 0
     let neg a = -a
-    let ( * ) = Pervasives.( * )
+    let ( * ) = Stdlib.( * )
     let one = 1
 
     let quot_rem a b = (a / b, (a mod b + b) mod b) (* non-negative remainder *)
