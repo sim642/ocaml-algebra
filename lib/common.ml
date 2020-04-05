@@ -54,7 +54,10 @@ struct
         | -1 -> -1
         | x -> failwith @@ Printf.sprintf "%d not invertible in Z" x
 
-    let quot_rem a b = (a / b, (a mod b + b) mod b) (* non-negative remainder *)
+    let quot_rem a b =
+        let r = (a mod b + b) mod b in (* non-negative remainder *)
+        let q = (a - r) / b in
+        (q, r)
 end
 
 module Pol (F: Field) =
