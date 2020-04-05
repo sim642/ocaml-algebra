@@ -1,13 +1,16 @@
 module type S =
 sig
     type e
-    include Ring.S with type t = e list
+    include Euclidean.S with type t = e list
 
     val create: e list -> t
     val deg: t -> int
+    val eval: t -> e -> e
+    val deriv: t -> t
 end
 
-module Make (F: Field.S) =
+module Make (F: Field.S):
+    S with type e = F.t =
 struct
     type e = F.t
     type t = e list

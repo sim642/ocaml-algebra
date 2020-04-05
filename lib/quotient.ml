@@ -4,7 +4,8 @@ sig
     val m: R.t
 end
 
-module Make (Arg: Arg) =
+module Make (Arg: Arg):
+    Field.S with type t = Arg.R.t =
 struct
     include Arg
     module REuclid = Euclidean.Algorithm (R)

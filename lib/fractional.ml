@@ -1,4 +1,5 @@
-module Make (R: Euclidean.S) =
+module Make (R: Euclidean.S):
+    Field.S with type t = R.t * R.t =
 struct
     type t = R.t * R.t
 
@@ -23,4 +24,4 @@ struct
     let inv (a, b) = create b a
 end
 
-module Integer = Make (Integer)
+module Integer: Field.S with type t = int * int = Make (Integer)
