@@ -1,6 +1,29 @@
 open Lib.Common
 
-module Q =
+module Frac (R: EuclideanRing) =
+struct
+    type t = R.t * R.t
+
+    module REuclid = EuclideanAlgorithm (R)
+
+    let create a b =
+        (* https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Simplification_of_fractions *)
+        let (_, _, ss, _, tt) = REuclid.full_extended_gcd a b in
+        (* TODO: canonical form: non-negative denom? *)
+        R.(neg tt, ss)
+
+    let to_string (a, b) = Printf.sprintf "%s/%s" (R.to_string a) (R.to_string b)
+
+    let (+) (a, b) (c, d) = create R.(a * d + b * c) R.(b * d)
+    let zero = create R.zero R.one
+    let neg (a, b) = create (R.neg a) b
+    let ( * ) (a, b) (c, d) = create R.(a * c) R.(b * d)
+    let one = create R.one R.one
+    let inv (a, b) = create b a
+end
+
+module Q = Frac (Z)
+(* module Q =
 struct
     type t = int * int
 
@@ -16,7 +39,7 @@ struct
     let ( * ) (a, b) (c, d) = create (a * c) (b * d)
     let one = create 1 1
     let inv (a, b) = create b a
-end
+end *)
 
 
 let solve_euclid_task (type a) (module F: Field with type t = a) f g =
