@@ -1,4 +1,4 @@
-open Lib.Common
+open Common
 
 type table = int array array
 

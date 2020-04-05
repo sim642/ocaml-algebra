@@ -49,6 +49,11 @@ struct
     let ( * ) = Stdlib.( * )
     let one = 1
 
+    let inv = function
+        | 1 -> 1
+        | -1 -> -1
+        | x -> failwith @@ Printf.sprintf "%d not invertible in Z" x
+
     let quot_rem a b = (a / b, (a mod b + b) mod b) (* non-negative remainder *)
 end
 

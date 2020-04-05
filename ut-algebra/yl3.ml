@@ -1,5 +1,24 @@
 open Lib.Common
 
+module Q =
+struct
+    type t = int * int
+
+    let create a b =
+        let d = ZEuclid.gcd a b in
+        (a / d, b / d)
+
+    let to_string (a, b) = Printf.sprintf "%d/%d" a b
+
+    let (+) (a, b) (c, d) = create (a * d + b * c) (b * d)
+    let zero = create 0 1
+    let neg (a, b) = create (-a) b
+    let ( * ) (a, b) (c, d) = create (a * c) (b * d)
+    let one = create 1 1
+    let inv (a, b) = create b a
+end
+
+
 let solve_euclid_task (type a) (module F: Field with type t = a) f g =
     let module PolF = Pol (F) in
     let module PolFEuclid = EuclideanAlgorithm (PolF) in
