@@ -1,11 +1,11 @@
-open Lib.Common
+open Lib
 
 let solve_div_task () =
     let p = read_int () in
-    let module F = Zn (struct let n = p end) in
-    let module PolF = Pol (F) in
+    let module F = IntegerModulo.Make (struct let m = p end) in
+    let module PolF = Polynomial.Make (F) in
 
-    let module PolFIO = IntPolIO (PolF) in
+    let module PolFIO = Polynomial.IntIO (PolF) in
     let a = PolFIO.read_pol () in
     let b = PolFIO.read_pol () in
 

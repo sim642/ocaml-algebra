@@ -1,7 +1,7 @@
-open Lib.Common
+open Lib
 
-let solve_quot_rem_task (module F: Field with type t = int) =
-    let module PolF = Pol (F) in
+let solve_quot_rem_task (module F: Field.S with type t = int) =
+    let module PolF = Polynomial.Make (F) in
     let input_pol s =
         Printf.printf "%s kordajad: " s;
         read_line ()

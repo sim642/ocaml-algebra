@@ -1,4 +1,4 @@
-open Lib.Common
+open Lib
 
 let read_vector n =
     let vector =
@@ -17,7 +17,7 @@ let print_vector vector =
 
 let solve_grs_decode_task () =
     let p = read_int () in
-    let module F = Zn (struct let n = p end) in
+    let module F = IntegerModulo.Make (struct let m = p end) in
 
     let (n, k) = match read_vector 2 with
         | [n; k] -> (n, k)

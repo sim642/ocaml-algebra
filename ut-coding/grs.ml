@@ -1,8 +1,8 @@
-open Lib.Common
+open Lib
 
 module type Param =
 sig
-    module F: Field
+    module F: Field.S
     val n: int
     val k: int
     val alpha: F.t list
@@ -13,11 +13,11 @@ module Code (Param: Param) =
 struct
     include Param
 
-    module PolF = Pol (F)
+    module PolF = Polynomial.Make (F)
     let d = n - k + 1
 
     let h =
-        let pow = repeat F.( * ) F.one in
+        let pow = Common.repeat F.( * ) F.one in
         List.init (d - 2 + 1) (fun l ->
                 alpha
                 |> List.map (pow l)

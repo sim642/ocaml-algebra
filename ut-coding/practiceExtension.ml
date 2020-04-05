@@ -1,9 +1,9 @@
-open Lib.Common
+open Lib
 
 let () =
-    let module F2 = Zn (struct let n = 2 end) in
-    let module PolF2 = Pol (F2) in
-    let module F8 = Quotient (struct
+    let module F2 = IntegerModulo.Make (struct let m = 2 end) in
+    let module PolF2 = Polynomial.Make (F2) in
+    let module F8 = Quotient.Make (struct
             module R = PolF2
             let m = [1; 1; 0; 1]
         end)
@@ -16,7 +16,7 @@ let () =
         |> print_endline
     in
 
-    let pow = repeat F8.( * ) F8.one in
+    let pow = Common.repeat F8.( * ) F8.one in
     let beta n = pow n [0; 1] in
 
     let module CParam =

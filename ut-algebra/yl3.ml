@@ -1,10 +1,10 @@
-open Lib.Common
+open Lib
 
-module Frac (R: EuclideanRing) =
+module Frac (R: Euclidean.S) =
 struct
     type t = R.t * R.t
 
-    module REuclid = EuclideanAlgorithm (R)
+    module REuclid = Euclidean.Algorithm (R)
 
     let create a b =
         (* https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Simplification_of_fractions *)
@@ -22,7 +22,7 @@ struct
     let inv (a, b) = create b a
 end
 
-module Q = Frac (Z)
+module Q = Frac (Integer)
 (* module Q =
 struct
     type t = int * int
@@ -42,9 +42,9 @@ struct
 end *)
 
 
-let solve_euclid_task (type a) (module F: Field with type t = a) f g =
-    let module PolF = Pol (F) in
-    let module PolFEuclid = EuclideanAlgorithm (PolF) in
+let solve_euclid_task (type a) (module F: Field.S with type t = a) f g =
+    let module PolF = Polynomial.Make (F) in
+    let module PolFEuclid = Euclidean.Algorithm (PolF) in
     Printf.printf "f kordajad: %s; g kordajad: %s\n" (PolF.to_string f) (PolF.to_string g);
     let (d, u, v) = PolFEuclid.extended_gcd f g in
     Printf.printf "  SÜT kordajad: %s\n" (PolF.to_string d);
@@ -53,7 +53,7 @@ let solve_euclid_task (type a) (module F: Field with type t = a) f g =
     Printf.printf "  VÜK kordajad: %s\n" (PolF.to_string m)
 
 
-module Z7 = Zn (struct let n = 7 end)
+module Z7 = IntegerModulo.Make (struct let m = 7 end)
 let f7 = [-28; -50; 16; -6; 3; 2]
 let g7 = [-14; -53; -28; 17; 6]
 let () = solve_euclid_task (module Z7) f7 g7
