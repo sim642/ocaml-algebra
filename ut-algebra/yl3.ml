@@ -1,4 +1,4 @@
-open Common
+open Lib.Common
 
 let solve_euclid_task (type a) (module F: Field with type t = a) f g =
     let module PolF = Pol (F) in

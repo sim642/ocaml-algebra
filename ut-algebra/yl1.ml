@@ -1,4 +1,4 @@
-open Common
+open Lib.Common
 
 type table = int array array
 
@@ -28,7 +28,7 @@ end
 
 (* OCaml'i standardteek on üsna vaene... *)
 let file_lines filename =
-    let channel = open_in filename in 
+    let channel = open_in filename in
     let lines = ref [] in
     (try
         while true; do

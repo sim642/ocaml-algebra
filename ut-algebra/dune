@@ -1,0 +1,3 @@
+(executables
+ (names yl1 yl3 tarn228)
+ (libraries lib))
