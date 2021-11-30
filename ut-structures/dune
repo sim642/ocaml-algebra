@@ -1,0 +1,3 @@
+(executables
+ (names hw7problem3 hw7problem4)
+ (libraries lib))
