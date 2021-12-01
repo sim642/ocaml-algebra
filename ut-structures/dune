@@ -1,3 +1,3 @@
 (executables
- (names hw7problem1 hw7problem3 hw7problem4 hw7problem5)
+ (names hw7problem1 hw7problem2 hw7problem3 hw7problem4 hw7problem5)
  (libraries lib))
